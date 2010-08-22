@@ -1,0 +1,12 @@
+<h1>Editing contacts</h1>
+
+<% form_for(@contacts) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @contacts %> |
+<%= link_to 'Back', contacts_path %>
