@@ -1,6 +1,6 @@
-<h1>Editing contacts</h1>
+<h1>Editing contact</h1>
 
-<% form_for(@contacts) do |f| %>
+<% form_for(@contact) do |f| %>
   <%= f.error_messages %>
 
   <p>
@@ -8,5 +8,5 @@
   </p>
 <% end %>
 
-<%= link_to 'Show', @contacts %> |
+<%= link_to 'Show', @contact %> |
 <%= link_to 'Back', contacts_path %>

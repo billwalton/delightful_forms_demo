@@ -1,12 +1,9 @@
 development:
   adapter: mysql
   encoding: utf8
-  reconnect: false
-  database: stretchy_fields_demo_development
-  pool: 5
+  database: delightful_forms_demo_development
   username: root
   password:
-  socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -14,19 +11,13 @@ development:
 test:
   adapter: mysql
   encoding: utf8
-  reconnect: false
-  database: stretchy_fields_demo_test
-  pool: 5
+  database: delightful_forms_demo_test
   username: root
   password:
-  socket: /var/run/mysqld/mysqld.sock
 
 production:
   adapter: mysql
   encoding: utf8
-  reconnect: false
-  database: stretchy_fields_demo_production
-  pool: 5
+  database: delightful_forms_demo_production
   username: root
   password: 
-  socket: /var/run/mysqld/mysqld.sock

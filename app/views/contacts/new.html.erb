@@ -1,11 +1,34 @@
-<h1>New contacts</h1>
+<h1>New contact</h1>
 
-<% form_for(@contacts) do |f| %>
+<% form_for(@contact) do |f| %>
   <%= f.error_messages %>
 
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
+
+  <div class="form_text_input">
+    <%= f.label :first_name %>
+    <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => nil, :initial_value => @contact.first_name, :default_value => @default_value['first_name'], :object => 'contact', :method => 'first_name', :required => true} %>
+  </div>
+  <div class="form_text_input">
+    <%= f.label :last_name %>
+    <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => nil, :initial_value => @contact.last_name, :default_value => @default_value['last_name'], :object => 'contact', :method => 'last_name', :required => true} %>
+  </div>
+  <div class="form_text_input">
+    <%= f.label :email %>
+    <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => nil, :initial_value => @contact.email, :default_value => @default_value['email'], :object => 'contact', :method => 'email', :required => false} %>
+  </div>
+
+  <%= render :partial => 'stretchy_fields_address_group', :locals => {:f => f } %>
+    
+  <div class="form_text_input">
+    <%= f.label :phone %>
+    <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => nil, :initial_value => @contact.phone, :default_value => @default_value['phone'], :object => 'contact', :method => 'phone', :required => false} %>
+  </div>
+
+<div class="clear"></div>
+<div class="form_actions">
+<%= f.submit "Create", :id => 'contact_submit', :class => 'button' %>
+<%= f.submit "Cancel", :id => 'contact_cancel', :class => 'button cancel_button' %>
+</div>
 <% end %>
 
 <%= link_to 'Back', contacts_path %>

@@ -2,7 +2,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @contacts = Contacts.all
+    @contacts = Contact.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,43 +13,44 @@ class ContactsController < ApplicationController
   # GET /contacts/1
   # GET /contacts/1.xml
   def show
-    @contacts = Contacts.find(params[:id])
+    @contact = Contact.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @contacts }
+      format.xml  { render :xml => @contact }
     end
   end
 
   # GET /contacts/new
   # GET /contacts/new.xml
   def new
-    @contacts = Contacts.new
-
+    @contact = Contact.new
+    create_defaults
+    @address_group_empty = true
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @contacts }
+      format.xml  { render :xml => @contact }
     end
   end
 
   # GET /contacts/1/edit
   def edit
-    @contacts = Contacts.find(params[:id])
+    @contact = Contact.find(params[:id])
   end
 
   # POST /contacts
   # POST /contacts.xml
   def create
-    @contacts = Contacts.new(params[:contacts])
+    @contact = Contact.new(params[:contact])
 
     respond_to do |format|
-      if @contacts.save
-        flash[:notice] = 'Contacts was successfully created.'
-        format.html { redirect_to(@contacts) }
-        format.xml  { render :xml => @contacts, :status => :created, :location => @contacts }
+      if @contact.save
+        flash[:notice] = 'Contact was successfully created.'
+        format.html { redirect_to(@contact) }
+        format.xml  { render :xml => @contact, :status => :created, :location => @contact }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @contacts.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -57,16 +58,16 @@ class ContactsController < ApplicationController
   # PUT /contacts/1
   # PUT /contacts/1.xml
   def update
-    @contacts = Contacts.find(params[:id])
+    @contact = Contact.find(params[:id])
 
     respond_to do |format|
-      if @contacts.update_attributes(params[:contacts])
-        flash[:notice] = 'Contacts was successfully updated.'
-        format.html { redirect_to(@contacts) }
+      if @contact.update_attributes(params[:contact])
+        flash[:notice] = 'Contact was successfully updated.'
+        format.html { redirect_to(@contact) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @contacts.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -74,12 +75,37 @@ class ContactsController < ApplicationController
   # DELETE /contacts/1
   # DELETE /contacts/1.xml
   def destroy
-    @contacts = Contacts.find(params[:id])
-    @contacts.destroy
+    @contact = Contact.find(params[:id])
+    @contact.destroy
 
     respond_to do |format|
       format.html { redirect_to(contacts_url) }
       format.xml  { head :ok }
     end
   end
+
+protected
+
+  def create_defaults
+    @default_value = @contact.default_values
+    @default_value.each do |key, value|
+      @contact[key] = value if @contact[key].blank?
+    end
+  end
+
+  def check_address_fields
+    address_fields = ['street', 'city', 'state', 'zip']
+    defaults = @contact.default_values
+    all_fields_are_defaults = true
+    defaults.each do |key, value|
+      if address_fields.include?(key)
+        if @contact[key] != value
+          all_fields_are_defaults = false
+          address_fields.clear
+        end
+      end
+    end
+    return all_fields_are_defaults
+  end
+
 end

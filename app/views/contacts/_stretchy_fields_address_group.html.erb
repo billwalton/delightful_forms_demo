@@ -1,0 +1,42 @@
+
+<div style="clear:both;"></div>
+<div style="border-top:1px solid #ddd;">
+  <div id=<%= "contact_address_group_link" %> style=<%= @address_group_empty == true ? "display:block" : "display:none" %> >
+    <div class="form_text_input" style="border-top:0px;">
+      <label for="Address" >Address </label>
+      <div id="contact_address_link" class="stretchy_link" style="display:block" >
+        <ul>
+          <li>
+            <a id="contact_address_group_link_value" onclick="swapStretchyLinkForGroup('contact_address_group');">
+              <%= "Optional" %>
+            </a>
+            <%= text_field_tag 'contact_address_group_start', nil, :class => "stretchy_group_start", :style => "display:none" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id=<%= "contact_address_group_block" %> class="stretchy_group" style=<%= @address_group_empty == true ? "display:none" : "display:block" %> >
+    <div class="form_text_input line1" style="border-top:0px;">
+      <%= f.label :street %>
+      <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => nil, :initial_value => @contact.street, :default_value => @default_value['sreet'], :object => 'contact', :method => 'street', :required => false} %>
+    </div>
+    <div class="form_text_input city">
+      <%= f.label :city %>
+      <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => '20', :initial_value => @contact.city, :default_value => @default_value['city'], :object => 'contact', :method => 'city', :required => false} %>
+    </div>
+    <div class="form_text_input state">
+      <%= f.label :state %>
+      <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => 3, :initial_value => @contact.state, :default_value => @default_value['state'], :object => 'contact', :method => 'state', :required => false} %>
+    </div>
+    <div class="form_text_input zip">
+      <%= f.label :zip %>
+      <%= render :partial => 'shared/stretchy_text_field', :locals => {:size => 5, :initial_value => @contact.zip, :default_value => @default_value['zip'], :object => 'contact', :method => 'zip', :required => false} %>
+    </div>
+
+    <%= text_field_tag 'contact_address_group_end', nil, :class => "stretchy_group_end", :style => "display:none" %>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+

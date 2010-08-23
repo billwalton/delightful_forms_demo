@@ -1,0 +1,33 @@
+<!-- (c) 2009-2010 Copyright William Joseph Walton, All Rights Reserved  -->
+<!-- This computer code is protected by U.S. and International copyright law. -->
+<!-- Reproduction, transmission or other use of this computer code in violation -->
+<!-- of the applicable End User License Agreement granted to the person who -->
+<!-- rightfully received this copy is strictly prohibited. -->
+
+<div class="stretchy_input_field">
+  <div id=<%= "#{object}_#{method}_link" %> class="stretchy_link" style=<%= required ? "display:none" : "display:block"  %> >
+    <ul>
+      <li>
+        <a id=<%= "#{object}_#{method}_link_value" %> onclick="swapStretchyLinkForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
+          <%= initial_value %>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id=<%= "#{object}_#{method}_input" %> style="display:none" <%= required ? 'required' : '' %> >
+    <% if size != nil %>
+      <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :size => size, :default_value => default_value, :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}', '#{default_value}')" %>
+    <% else %>
+      <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :default_value => default_value, :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}', '#{default_value}')" %>
+      <% end %>
+  </div>
+  <div id=<%= "#{object}_#{method}_box" %> class="stretchy_box" style=<%= required ? "display:block" : "display:none"  %> >
+    <ul>
+      <li>
+        <a id=<%= "#{object}_#{method}_box_value" %> style="color:<%= (initial_value == default_value) ? "#888888" : "black"%>" onclick="swapStretchyBoxForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
+          <%= initial_value %>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
