@@ -41,7 +41,6 @@ class ContactsController < ApplicationController
   # POST /contacts
   # POST /contacts.xml
   def create
-    @contact = Contact.new(params[:contact])
 
     respond_to do |format|
       if params[:commit] == 'Cancel'
@@ -49,11 +48,14 @@ class ContactsController < ApplicationController
           redirect_to contacts_path
         }
       else
+        @contact = Contact.new(params[:contact])
         if @contact.save
           flash[:notice] = 'Contact was successfully created.'
           format.html { redirect_to(@contact) }
           format.xml  { render :xml => @contact, :status => :created, :location => @contact }
         else
+          create_defaults
+          @address_group_empty = check_address_fields
           format.html { render :action => "new" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end
@@ -95,7 +97,9 @@ protected
   def create_defaults
     @default_value = @contact.default_values
     @default_value.each do |key, value|
+      Rails.logger.info('###### defalt value key=' + key + '  value=' + value)
       @contact[key] = value if @contact[key].blank?
+      Rails.logger.info('###### contact key=' + key + '  value=' + value)
     end
   end
 

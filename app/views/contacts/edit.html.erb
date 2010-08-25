@@ -3,10 +3,12 @@
 <% form_for(@contact) do |f| %>
   <%= f.error_messages %>
 
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
-<% end %>
+   <%= render :partial => 'form', :locals => {:f => f} %>
 
-<%= link_to 'Show', @contact %> |
-<%= link_to 'Back', contacts_path %>
+  <div class="clear"></div>
+  <div class="form_actions">
+    <%= f.submit "Update", :id => 'contact_submit', :class => 'button' %>
+    <%= f.submit "Cancel", :id => 'contact_cancel', :class => 'button cancel_button' %>
+  </div>
+
+<% end %>
