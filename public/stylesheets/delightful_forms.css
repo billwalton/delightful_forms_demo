@@ -4,14 +4,13 @@
 /* of the applicable End User License Agreement granted to the person who */
 /* rightfully received this copy is strictly prohibited. */
 
-* @import url("reset.css"); */
+/* @import url("reset.css"); */
 /* @import url("960.css");  */
 
 /* Forms, inputs
 ======================================================================*/
 
 input[type="text"],
-input[type="password"],
 textarea{
     font-size:14px;
     padding:5px;
@@ -86,27 +85,15 @@ label, .label{
     float: left;
 }
 
-.stretchy_group .line1 input,
-.stretchy_group .line2 input {
+.stretchy_group .first_name input,
+.stretchy_group .last_name input {
     width: 100%;
     margin-top: 3px;
 }
 
-.stretchy_group .line1 label,
-.stretchy_group .line2 label,
-.stretchy_group .name label,
-.stretchy_group .apartment label,
-.stretchy_group .instructions label {
+.stretchy_group .street label {
     text-align: left;
 }
-
-.stretchy_group .apartment label,
-.stretchy_group .company label,
-.stretchy_group .instructions label {
-    text-align: left;
-    width: 22%;
-}
-
 
 .stretchy_group .city {
     width:58%;
@@ -124,9 +111,6 @@ label, .label{
     width: 18%;
 }
 
-.stretchy_group .instructions {
-    width: 100%;
-}
 .stretchy_group .city label {
     text-align: left;
 }
@@ -152,7 +136,6 @@ label, .label{
     margin-top: 3px;
 }
 
-
 .delivery_address_list_item {
     float: left;
     min-height: 4.25em;
@@ -160,14 +143,6 @@ label, .label{
     border-bottom: solid thin gray;
     color: #637362;
     padding-left: 10px;
-}
-
-.delivery_address_list_item a {
-    color: #637362;
-}
-
-.delivery_address_list_item a:hover {
-    color: #000;
 }
 
 .list_item a {
@@ -213,8 +188,8 @@ label, .label{
     color: #3B8054;
 }
 
-.stretchy_box a:hover {
-    color: #000;
+ .stretchy_box a:hover {
+    color: #FFF;
 }
 
 .stretchy_link {
@@ -248,9 +223,9 @@ label, .label{
     color: #888888;
 }
 
-.stretchy_link a:hover {
+/*.stretchy_link a:hover {
     color: #000;
-}
+}*/
 
 
 .list_item {

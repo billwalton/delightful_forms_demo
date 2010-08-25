@@ -44,13 +44,19 @@ class ContactsController < ApplicationController
     @contact = Contact.new(params[:contact])
 
     respond_to do |format|
-      if @contact.save
-        flash[:notice] = 'Contact was successfully created.'
-        format.html { redirect_to(@contact) }
-        format.xml  { render :xml => @contact, :status => :created, :location => @contact }
+      if params[:commit] == 'Cancel'
+        format.html {
+          redirect_to contacts_path
+        }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
+        if @contact.save
+          flash[:notice] = 'Contact was successfully created.'
+          format.html { redirect_to(@contact) }
+          format.xml  { render :xml => @contact, :status => :created, :location => @contact }
+        else
+          format.html { render :action => "new" }
+          format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end

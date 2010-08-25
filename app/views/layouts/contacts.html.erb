@@ -6,9 +6,13 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Contacts: <%= controller.action_name %></title>
   <%= stylesheet_link_tag 'application' %>
-  <%= stylesheet_link_tag 'delightful_forms' %>  
+  <%= stylesheet_link_tag 'delightful_forms' %>
+  <%= javascript_include_tag :defaults %>
 </head>
-<body>
+<body onLoad="findTabbableElements()">
+  <script type="text/javascript">
+    document.onkeypress = advanceFocusOnTab;
+  </script>
 
 <p style="color: green"><%= flash[:notice] %></p>
 

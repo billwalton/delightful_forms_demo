@@ -16,7 +16,7 @@ class Contact < ActiveRecord::Base
 	end
 
 	def eliminate_defaults
-		Customer.column_names.each do |this_field|
+		Contact.column_names.each do |this_field|
 			self[this_field] = '' if self.default_values[this_field] == self[this_field]
 		end
 	end
