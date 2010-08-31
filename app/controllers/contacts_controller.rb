@@ -25,7 +25,7 @@ class ContactsController < ApplicationController
   # GET /contacts/new.xml
   def new
     @contact = Contact.new
-    create_defaults
+    @default_value = @contact.create_defaults
     @address_group_empty = true
     respond_to do |format|
       format.html # new.html.erb
@@ -36,7 +36,7 @@ class ContactsController < ApplicationController
   # GET /contacts/1/edit
   def edit
     @contact = Contact.find(params[:id])
-    create_defaults
+    @default_value = @contact.create_defaults
     @address_group_empty = check_address_fields
   end
 
@@ -56,7 +56,7 @@ class ContactsController < ApplicationController
           format.html { redirect_to(@contact) }
           format.xml  { render :xml => @contact, :status => :created, :location => @contact }
         else
-          create_defaults
+          @default_value = @contact.create_defaults
           @address_group_empty = check_address_fields
           format.html { render :action => "new" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
@@ -76,6 +76,8 @@ class ContactsController < ApplicationController
         format.html { redirect_to(@contact) }
         format.xml  { head :ok }
       else
+        @default_value = @contact.create_defaults
+        @address_group_empty = check_address_fields
         format.html { render :action => "edit" }
         format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
       end
@@ -95,15 +97,6 @@ class ContactsController < ApplicationController
   end
 
 protected
-
-  def create_defaults
-    @default_value = @contact.default_values
-    @default_value.each do |key, value|
-      Rails.logger.info('###### defalt value key=' + key + '  value=' + value)
-      @contact[key] = value if @contact[key].blank?
-      Rails.logger.info('###### contact key=' + key + '  value=' + value)
-    end
-  end
 
   def check_address_fields
     address_fields = ['street', 'city', 'state', 'zip']
