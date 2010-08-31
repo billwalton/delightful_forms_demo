@@ -36,6 +36,8 @@ class ContactsController < ApplicationController
   # GET /contacts/1/edit
   def edit
     @contact = Contact.find(params[:id])
+    create_defaults
+    @address_group_empty = check_address_fields
   end
 
   # POST /contacts
