@@ -68,18 +68,23 @@ class ContactsController < ApplicationController
   # PUT /contacts/1
   # PUT /contacts/1.xml
   def update
-    @contact = Contact.find(params[:id])
-
     respond_to do |format|
-      if @contact.update_attributes(params[:contact])
-        flash[:notice] = 'Contact was successfully updated.'
-        format.html { redirect_to(@contact) }
-        format.xml  { head :ok }
+      if params[:commit] == 'Cancel'
+        format.html {
+          redirect_to contacts_path
+        }
       else
-        @default_value = @contact.create_defaults
-        @address_group_empty = check_address_fields
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
+        @contact = Contact.find(params[:id])
+        if @contact.update_attributes(params[:contact])
+          flash[:notice] = 'Contact was successfully updated.'
+          format.html { redirect_to(@contact) }
+          format.xml  { head :ok }
+        else
+          @default_value = @contact.create_defaults
+          @address_group_empty = check_address_fields
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end
