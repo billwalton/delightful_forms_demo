@@ -13,18 +13,18 @@ class Contact < ActiveRecord::Base
 	def default_values
     defaults = self.create_from_validations
     defaults['email'] = 'add Email address'
+    defaults['address'] = 'Optional'
     defaults
 	end
 
   def create_from_validations
-    {'first_name' => 'Required',
-     'last_name' => 'Required',
-     'street' => 'Optional',
-     'city' => 'Optional',
-     'state' => 'Optional',
-     'zip' => 'Optional',
-     'email' => 'add eMail address',
-     'phone' => 'Optional'} 
+    values = Hash.new
+    columns = self.class.column_names
+    columns.delete("id")
+    columns.each {|c| values[c] = 'Optional'}
+    validations = self.class.reflect_on_all_validations
+    validations.each {|v| values[v.name.to_s] = 'Required' if v.macro == :validates_presence_of }
+    values
   end
 
 	def eliminate_defaults
