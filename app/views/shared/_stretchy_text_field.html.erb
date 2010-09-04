@@ -5,27 +5,27 @@
 <!-- rightfully received this copy is strictly prohibited. -->
 
 <div class="stretchy_input_field">
-  <div id=<%= "#{object}_#{method}_link" %> class="stretchy_link" style=<%= required ? "display:none" : "display:block"  %> >
+  <div id=<%= "#{object}_#{method}_link" %> class="stretchy_link" style=<%= @required_fields.include?(method) ? "display:none" : "display:block"  %> >
     <ul>
       <li>
         <a id=<%= "#{object}_#{method}_link_value" %> onclick="swapStretchyLinkForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
-          <%= initial_value %>
+          <%= @initial_value[method] %>
         </a>
       </li>
     </ul>
   </div>
-  <div id=<%= "#{object}_#{method}_input" %> style="display:none" <%= required ? 'required' : '' %> >
+  <div id=<%= "#{object}_#{method}_input" %> style="display:none" <%= @required_fields.include?(method) ? 'required' : '' %> >
     <% if size != nil %>
-      <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :size => size, :default_value => default_value, :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}', '#{default_value}')" %>
+      <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :size => size, :default_value => "#{@default_value[method]}", :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}', '#{@default_value[%Q{#{method}}]}')" %>
     <% else %>
-      <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :default_value => default_value, :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}', '#{default_value}')" %>
+      <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :default_value => "#{@default_value[method]}", :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}', '#{@default_value[%Q{#{method}}]}')" %>
       <% end %>
   </div>
-  <div id=<%= "#{object}_#{method}_box" %> class="stretchy_box" style=<%= required ? "display:block" : "display:none"  %> >
+  <div id=<%= "#{object}_#{method}_box" %> class="stretchy_box" style=<%= @required_fields.include?(method) ? "display:block" : "display:none"  %> >
     <ul>
       <li>
-        <a id=<%= "#{object}_#{method}_box_value" %> style="color:<%= (initial_value == default_value) ? "#888888" : "black"%>" onclick="swapStretchyBoxForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
-          <%= initial_value %>
+        <a id=<%= "#{object}_#{method}_box_value" %> style="color:<%= (@initial_value[method] == @default_value[method]) ? "#888888" : "black"%>" onclick="swapStretchyBoxForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
+          <%= @initial_value[method] %>
         </a>
       </li>
     </ul>

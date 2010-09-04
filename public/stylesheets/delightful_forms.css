@@ -47,7 +47,7 @@ label, .label{
 
 .form_text_input label, .form_text_input .label {
     float: left;
-    width: 172px;
+    width: 7em;
     margin-right: 12px;
     text-align: left;
 }

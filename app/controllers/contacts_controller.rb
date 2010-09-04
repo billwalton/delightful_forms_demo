@@ -26,6 +26,8 @@ class ContactsController < ApplicationController
   def new
     @contact = Contact.new
     @default_value = @contact.create_defaults
+    @initial_value = @contact.get_initial_values
+    @required_fields = @contact.identify_required_fields
     @address_group_empty = true
     respond_to do |format|
       format.html # new.html.erb
@@ -37,7 +39,9 @@ class ContactsController < ApplicationController
   def edit
     @contact = Contact.find(params[:id])
     @default_value = @contact.create_defaults
-    @address_group_empty = check_address_fields
+    @initial_value = @contact.get_initial_values
+    @required_fields = @contact.identify_required_fields
+    @address_group_empty = @contact.check_group_fields('address')
   end
 
   # POST /contacts
@@ -57,7 +61,9 @@ class ContactsController < ApplicationController
           format.xml  { render :xml => @contact, :status => :created, :location => @contact }
         else
           @default_value = @contact.create_defaults
-          @address_group_empty = check_address_fields
+          @initial_value = @contact.get_initial_values
+          @required_fields = @contact.identify_required_fields
+          @address_group_empty = @contact.check_group_fields('address')
           format.html { render :action => "new" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end
@@ -81,7 +87,9 @@ class ContactsController < ApplicationController
           format.xml  { head :ok }
         else
           @default_value = @contact.create_defaults
-          @address_group_empty = check_address_fields
+          @initial_value = @contact.get_initial_values
+          @required_fields = @contact.identify_required_fields
+          @address_group_empty = @contact.check_group_fields('address')
           format.html { render :action => "edit" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end

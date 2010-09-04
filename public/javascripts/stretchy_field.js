@@ -1,13 +1,6 @@
 var tabbableElements = [];
 var elementGroups = [];
 var currentElement = -1;
-var topLevelLinks = [];
-var secondLevelLinks = [];
-
-function findTabbableElementsAndResetNav() {
-    findTabbableElements();
-    resetNavigationLinks();
-}
 
 function findTabbableElements() {
     tabbableElements.length = 0;
@@ -253,7 +246,7 @@ function setCurrentElement(elementName) {
     }
 }
 
-function swapTextInputForStretchyControl(elementName, default_value) {
+function swapTextInputForStretchyControl(elementName) {
     var user_input = $(elementName).getValue();
     var default_value;
     var original_value;
@@ -270,16 +263,24 @@ function swapTextInputForStretchyControl(elementName, default_value) {
     {
         $(elementName + '_input').hide();
         $(elementName + '_box').show();
-        if (user_input.length > 0)
+        if (user_input.length > 0 && user_input != default_value && user_input != original_value)
         {
             $(elementName + '_box_value').innerHTML = user_input;
+            $(elementName).value = user_input;
             $(elementName + '_box_value').style.color = 'black';
         }
         else
         {
-            $(elementName + '_box_value').innerHTML = default_value;
-            $(elementName + '_box_value').value = default_value;
-            $(elementName + '_box_value').style.color = '#888888';
+            if (user_input == original_value) {
+                $(elementName + '_box_value').innerHTML = original_value;
+                $(elementName + '_box_value').style.color = '#888888';
+                $(elementName).value = original_value;
+            }
+            else {
+                $(elementName + '_box_value').innerHTML = default_value;
+                $(elementName + '_box_value').style.color = '#888888';
+                $(elementName).value = default_value;
+            }
         }
     }
     else // optional field
@@ -307,4 +308,3 @@ function swapTextInputForStretchyControl(elementName, default_value) {
         }
     }
 }
-
