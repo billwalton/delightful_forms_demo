@@ -1,9 +1,11 @@
+class String
+  def camel_case
+    self.tr('_',' ').split(' ').map {|part| part.capitalize}.join
+  end
+end
+
 module StretchyFieldExtensions
   
-  def create_stretchy_field_defaults
-    true
-  end
-
   def create_defaults
     self.default_values.each do |key, value|
       self[key] = value if self[key].blank?

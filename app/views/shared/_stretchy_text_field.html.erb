@@ -5,7 +5,7 @@
 <!-- rightfully received this copy is strictly prohibited. -->
 
 <div class="stretchy_input_field">
-  <div id=<%= "#{object}_#{method}_link" %> class="stretchy_link" style=<%= @required_fields.include?(method) ? "display:none" : "display:block"  %> >
+  <div id=<%= "#{object}_#{method}_link" %> class="stretchy_link" style=<%= Object.const_get(object.camel_case).new().send(:identify_required_fields).include?(method) ? "display:none" : "display:block"  %> >
     <ul>
       <li>
         <a id=<%= "#{object}_#{method}_link_value" %> onclick="swapStretchyLinkForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
@@ -14,17 +14,17 @@
       </li>
     </ul>
   </div>
-  <div id=<%= "#{object}_#{method}_input" %> style="display:none" <%= @required_fields.include?(method) ? 'required' : '' %> >
+  <div id=<%= "#{object}_#{method}_input" %> style="display:none" <%= Object.const_get(object.camel_case).new().send(:identify_required_fields).include?(method) ? 'required' : '' %> >
     <% if size != nil %>
       <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :size => size, :default_value => "#{@default_value[method]}", :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')" %>
     <% else %>
       <%= text_field object, method, :autocomplete => "off", :class => 'stretchy_input', :default_value => "#{@default_value[method]}", :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')" %>
       <% end %>
   </div>
-  <div id=<%= "#{object}_#{method}_box" %> class="stretchy_box" style=<%= @required_fields.include?(method) ? "display:block" : "display:none"  %> >
+  <div id=<%= "#{object}_#{method}_box" %> class="stretchy_box" style=<%= Object.const_get(object.camel_case).new().send(:identify_required_fields).include?(method) ? "display:block" : "display:none"  %> >
     <ul>
       <li>
-        <a id=<%= "#{object}_#{method}_box_value" %> style="color:<%= (@initial_value[method] == @default_value[method]) ? "#888888" : "black"%>" onclick="swapStretchyBoxForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
+        <a id=<%= "#{object}_#{method}_box_value" %> onclick="swapStretchyBoxForTextInput(<%= '\'' +  object + '_' + method + '\'' %>);">
           <%= @initial_value[method] %>
         </a>
       </li>

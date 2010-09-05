@@ -27,8 +27,9 @@ class ContactsController < ApplicationController
     @contact = Contact.new
     @default_value = @contact.create_defaults
     @initial_value = @contact.get_initial_values
-    @required_fields = @contact.identify_required_fields
     @address_group_empty = true
+    Rails.logger.info('###### @default_value is ' + @default_value.inspect)
+    Rails.logger.info('###### @initial_value is ' + @initial_value.inspect)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @contact }
@@ -40,8 +41,13 @@ class ContactsController < ApplicationController
     @contact = Contact.find(params[:id])
     @default_value = @contact.create_defaults
     @initial_value = @contact.get_initial_values
-    @required_fields = @contact.identify_required_fields
     @address_group_empty = @contact.check_group_fields('address')
+    Rails.logger.info('###### @default_value is ' + @default_value.inspect)
+    Rails.logger.info('###### @initial_value is ' + @initial_value.inspect)
+    respond_to do |format|
+      format.html # edit.html.erb
+      format.xml  { render :xml => @contact }
+    end
   end
 
   # POST /contacts
@@ -62,7 +68,6 @@ class ContactsController < ApplicationController
         else
           @default_value = @contact.create_defaults
           @initial_value = @contact.get_initial_values
-          @required_fields = @contact.identify_required_fields
           @address_group_empty = @contact.check_group_fields('address')
           format.html { render :action => "new" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
@@ -88,7 +93,6 @@ class ContactsController < ApplicationController
         else
           @default_value = @contact.create_defaults
           @initial_value = @contact.get_initial_values
-          @required_fields = @contact.identify_required_fields
           @address_group_empty = @contact.check_group_fields('address')
           format.html { render :action => "edit" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
