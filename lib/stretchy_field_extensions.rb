@@ -22,13 +22,10 @@ module StretchyFieldExtensions
     values
   end
 
-  def identify_required_fields
-    required_fields = []
-    defaults = self.create_from_validations
-    defaults.each {|k,v|
-        required_fields.push(k) if v == 'Required'
-      }
-    required_fields
+  def is_a_required_field?(field)
+    column_validations = self.class.reflect_on_all_validations
+    column_validations.each {|v| return true if v.name.to_s == field.to_s && v.macro == :validates_presence_of }
+    false
   end
 
 	def default_values
@@ -43,8 +40,8 @@ module StretchyFieldExtensions
     columns = self.class.column_names
     columns.delete("id")
     columns.each {|c| values[c] = 'Optional'}
-    validations = self.class.reflect_on_all_validations
-    validations.each {|v| values[v.name.to_s] = 'Required' if v.macro == :validates_presence_of }
+    column_validations = self.class.reflect_on_all_validations
+    column_validations.each {|v| values[v.name.to_s] = 'Required' if v.macro == :validates_presence_of }
     values
   end
 

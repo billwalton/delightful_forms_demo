@@ -1,5 +1,4 @@
 class Contact < ActiveRecord::Base
-  require 'stretchy_field_extensions'
   include StretchyFieldExtensions
 
   before_validation :eliminate_stretchy_field_defaults
