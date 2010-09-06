@@ -50,19 +50,4 @@ module StretchyFieldExtensions
 		end
 	end
 
-#  def check_group_fields(group)
-#    address_fields = ['street', 'city', 'state', 'zip']
-#    defaults = self.default_values
-#    all_fields_are_defaults = true
-#    defaults.each do |key, value|
-#      if address_fields.include?(key)
-#        if self[key] != value
-#          all_fields_are_defaults = false
-#          address_fields.clear
-#        end
-#      end
-#    end
-#    return all_fields_are_defaults
-#  end
-
 end

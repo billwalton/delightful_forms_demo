@@ -26,6 +26,7 @@ class ContactsController < ApplicationController
   def new
     @contact = Contact.new
     @initial_value = @contact.get_initial_values
+    Rails.logger.info('###### @initial_value is ' + @initial_value.inspect)
     @address_group_empty = true
     respond_to do |format|
       format.html # new.html.erb
