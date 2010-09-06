@@ -272,7 +272,12 @@ function swapTextInputForStretchyControl(elementName) {
         else
         {
             if (user_input == original_value) {
-                $(elementName + '_box_value').innerHTML = original_value;
+                if(original_value.blank()){
+                  $(elementName + '_box_value').innerHTML = default_value;
+                }
+                else {
+                  $(elementName + '_box_value').innerHTML = original_value;
+                }
                 $(elementName + '_box_value').style.color = '#888888';
                 $(elementName).value = original_value;
             }
@@ -296,7 +301,12 @@ function swapTextInputForStretchyControl(elementName) {
         else
         {
             if (user_input == original_value) {
-                $(elementName + '_link_value').innerHTML = original_value;
+                if(original_value.blank()){
+                  $(elementName + '_link_value').innerHTML = default_value;
+                }
+                else {
+                  $(elementName + '_link_value').innerHTML = original_value;
+                }
                 $(elementName + '_link_value').style.color = '#888888';
                 $(elementName).value = original_value;
             }

@@ -25,11 +25,8 @@ class ContactsController < ApplicationController
   # GET /contacts/new.xml
   def new
     @contact = Contact.new
-    @default_value = @contact.create_defaults
     @initial_value = @contact.get_initial_values
     @address_group_empty = true
-    Rails.logger.info('###### @default_value is ' + @default_value.inspect)
-    Rails.logger.info('###### @initial_value is ' + @initial_value.inspect)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @contact }
@@ -39,11 +36,8 @@ class ContactsController < ApplicationController
   # GET /contacts/1/edit
   def edit
     @contact = Contact.find(params[:id])
-    @default_value = @contact.create_defaults
     @initial_value = @contact.get_initial_values
-    @address_group_empty = @contact.check_group_fields('address')
-    Rails.logger.info('###### @default_value is ' + @default_value.inspect)
-    Rails.logger.info('###### @initial_value is ' + @initial_value.inspect)
+    @address_group_empty = check_address_fields
     respond_to do |format|
       format.html # edit.html.erb
       format.xml  { render :xml => @contact }
@@ -66,9 +60,8 @@ class ContactsController < ApplicationController
           format.html { redirect_to(@contact) }
           format.xml  { render :xml => @contact, :status => :created, :location => @contact }
         else
-          @default_value = @contact.create_defaults
           @initial_value = @contact.get_initial_values
-          @address_group_empty = @contact.check_group_fields('address')
+          @address_group_empty = check_address_fields
           format.html { render :action => "new" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end
@@ -91,9 +84,8 @@ class ContactsController < ApplicationController
           format.html { redirect_to(@contact) }
           format.xml  { head :ok }
         else
-          @default_value = @contact.create_defaults
           @initial_value = @contact.get_initial_values
-          @address_group_empty = @contact.check_group_fields('address')
+          @address_group_empty = check_address_fields
           format.html { render :action => "edit" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end
@@ -113,19 +105,11 @@ class ContactsController < ApplicationController
     end
   end
 
-protected
-
   def check_address_fields
     address_fields = ['street', 'city', 'state', 'zip']
-    defaults = @contact.default_values
     all_fields_are_defaults = true
-    defaults.each do |key, value|
-      if address_fields.include?(key)
-        if @contact[key] != value
-          all_fields_are_defaults = false
-          address_fields.clear
-        end
-      end
+    address_fields.each do |field|
+      all_fields_are_defaults = false unless @contact[field].blank?
     end
     return all_fields_are_defaults
   end
