@@ -66,6 +66,13 @@ label, .label{
     margin: 0px;
     height:36px;
 }
+
+.form_text_input .stretchy_input_field a:hover,
+.form_text_input .stretchy_link a:hover {
+  color: #000;
+  background-color: transparent;
+}
+
 .form_text_input .stretchy_field_message {
     float: right;
     width: 473px;
