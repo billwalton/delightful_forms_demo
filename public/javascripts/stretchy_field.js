@@ -2,6 +2,26 @@ var tabbableElements = [];
 var elementGroups = [];
 var currentElement = -1;
 
+function populateLinkValues(element, defaultValue, originalValue) {
+  var linkID;
+  var boxID;
+
+  if(element.className != 'stretchy_group_start' && element.className != 'stretchy_group_end'){
+    linkID = element.name + '_link_value';
+    boxID = element.name + '_box_value';
+    if($(linkID) != null && $(boxID) != null) {
+      if(originalValue.blank()){
+        $(linkID).innerHTML = defaultValue;
+        $(boxID).innerHTML = defaultValue;
+      }
+      else {
+        $(linkID).innerHTML = originalValue;
+        $(boxID).innerHTML = originalValue;
+      }
+    }
+  }
+}
+
 function findTabbableElements() {
     tabbableElements.length = 0;
     elementGroups.length = 0;
@@ -20,6 +40,7 @@ function findTabbableElements() {
                 originalValue = allElements[e].getValue();
                 if(originalValue.blank()){allElements[e].value = defaultValue;}
                 var newElement = new domElement(allElements[e].id, allElements[e].className, defaultValue, originalValue);
+                populateLinkValues(newElement, defaultValue, originalValue);
                 tabbableElements.push(newElement);
                 if(newElement.className == 'stretchy_group_start') {
                     groupName = newElement.name.replace(/_start/,'');

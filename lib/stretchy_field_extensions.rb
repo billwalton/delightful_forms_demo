@@ -37,15 +37,18 @@ module StretchyFieldExtensions
   def create_from_validations
     values = Hash.new
     columns = self.class.column_names
-    columns.delete("id")
-    columns.each {|c| values[c] = 'Optional'}
+    Rails.logger.info('##### creating for ' + columns.inspect)
+    #columns.delete("id")
+    columns.each {|c| values[c] = 'Optional' unless c == 'id'}
     column_validations = self.class.reflect_on_all_validations
     column_validations.each {|v| values[v.name.to_s] = 'Required' if v.macro == :validates_presence_of }
     values
   end
 
 	def eliminate_stretchy_field_defaults
-		self.class.column_names.each do |this_field|
+    columns = self.class.column_names
+    columns.each do |this_field|
+      Rails.logger.info('#### eliminating default value for ' + this_field)
 			self[this_field] = '' if self.default_values[this_field] == self[this_field]
 		end
 	end

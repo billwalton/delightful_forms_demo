@@ -25,8 +25,6 @@ class ContactsController < ApplicationController
   # GET /contacts/new.xml
   def new
     @contact = Contact.new
-    @initial_value = @contact.get_initial_values
-    Rails.logger.info('###### @initial_value is ' + @initial_value.inspect)
     @address_group_empty = true
     respond_to do |format|
       format.html # new.html.erb
@@ -37,7 +35,6 @@ class ContactsController < ApplicationController
   # GET /contacts/1/edit
   def edit
     @contact = Contact.find(params[:id])
-    @initial_value = @contact.get_initial_values
     @address_group_empty = check_address_fields
     respond_to do |format|
       format.html # edit.html.erb
@@ -61,7 +58,6 @@ class ContactsController < ApplicationController
           format.html { redirect_to(@contact) }
           format.xml  { render :xml => @contact, :status => :created, :location => @contact }
         else
-          @initial_value = @contact.get_initial_values
           @address_group_empty = check_address_fields
           format.html { render :action => "new" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
@@ -85,7 +81,6 @@ class ContactsController < ApplicationController
           format.html { redirect_to(@contact) }
           format.xml  { head :ok }
         else
-          @initial_value = @contact.get_initial_values
           @address_group_empty = check_address_fields
           format.html { render :action => "edit" }
           format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
