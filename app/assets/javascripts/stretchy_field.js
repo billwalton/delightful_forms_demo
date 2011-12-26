@@ -2,6 +2,10 @@ var tabbableElements = [];
 var elementGroups = [];
 var currentElement = -1;
 
+$(function() {
+  findTabbableElements();
+}); // end of document.ready
+
 function populateLinkValues(element, defaultValue, originalValue) {
   var linkID;
   var boxID;
