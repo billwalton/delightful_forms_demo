@@ -25,6 +25,7 @@ class ContactsController < ApplicationController
   # GET /contacts/new.xml
   def new
     @contact = Contact.new
+    Rails.logger.info('##### @contact is ' + @contact.inspect)
     @address_group_empty = true
     respond_to do |format|
       format.html # new.html.erb

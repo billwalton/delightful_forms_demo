@@ -1,7 +1,17 @@
 <h1>New contact</h1>
 
-<% form_for(@contact) do |f| %>
-  <%= f.error_messages %>
+<%= form_for(@contact) do |f| %>
+  <% if @contact.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contact.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @contact.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <%= render :partial => 'form', :locals => {:f => f} %>
 

@@ -7,16 +7,16 @@ function populateLinkValues(element, defaultValue, originalValue) {
   var boxID;
 
   if(element.className != 'stretchy_group_start' && element.className != 'stretchy_group_end'){
-    linkID = element.name + '_link_value';
-    boxID = element.name + '_box_value';
+    linkID = '#' + element.name + '_link_value';
+    boxID = '#' + element.name + '_box_value';
     if($(linkID) != null && $(boxID) != null) {
-      if(originalValue.blank()){
-        $(linkID).innerHTML = defaultValue;
-        $(boxID).innerHTML = defaultValue;
+      if(originalValue == null || originalValue == "") {
+        $(linkID).text(defaultValue);
+        $(boxID).text(defaultValue);
       }
       else {
-        $(linkID).innerHTML = originalValue;
-        $(boxID).innerHTML = originalValue;
+        $(linkID).text(originalValue);
+        $(boxID).text(originalValue);
       }
     }
   }
@@ -37,8 +37,8 @@ function findTabbableElements() {
         for(var e=0; e < allElements.length; e++) {
             if(allElements[e].type != 'hidden') {
                 defaultValue = allElements[e].getAttribute("default_value");
-                originalValue = allElements[e].getValue();
-                if(originalValue.blank()){allElements[e].value = defaultValue;}
+                originalValue = allElements[e].value;
+                if(originalValue == null || originalValue == ""){allElements[e].value = defaultValue;}
                 var newElement = new domElement(allElements[e].id, allElements[e].className, defaultValue, originalValue);
                 populateLinkValues(newElement, defaultValue, originalValue);
                 tabbableElements.push(newElement);
@@ -145,7 +145,7 @@ function advanceFocusOnTab(e) {
         }
         else
         {
-            $(tabbableElements[nextElement].name).focus();
+            $('#' + tabbableElements[nextElement].name).focus();
         }
         currentElement = nextElement;
         return false;
@@ -171,8 +171,8 @@ function swapStretchyLinkForGroup(elementName) {
       groupName = elementName.replace(/_start/, '');
     }
 
-    $(groupName + '_link').hide();
-    $(groupName + '_block').show();
+    $('#' + groupName + '_link').hide();
+    $('#' + groupName + '_block').show();
 }
 
 function swapStretchyGroupForLink(elementName) {
@@ -191,8 +191,8 @@ function swapStretchyGroupForLink(elementName) {
     }
     else
     {
-        $(groupName + '_block').hide();
-        $(groupName + '_link').show();
+        $('#' + groupName + '_block').hide();
+        $('#' + groupName + '_link').show();
         return true;
     }
 }
@@ -211,8 +211,8 @@ function checkForContent(groupName) {
     }
 
     for(var i=group.firstElementIndex; i <= group.lastElementIndex; i++){
-        currentValue = $(tabbableElements[i].name).getValue();
-        if(currentValue != tabbableElements[i].defaultValue && !currentValue.empty() ) {
+        currentValue = $(tabbableElements[i].name).val();
+        if(currentValue != tabbableElements[i].defaultValue && !(currentValue == null || currentValue == "") ) {
             groupHasContent = true;
             break;
         }
@@ -222,25 +222,25 @@ function checkForContent(groupName) {
 }
 
 function setFocusOnStretchy(elementName) {
-    $(elementName + '_link').hide();
-    $(elementName + '_box').hide();
-    $(elementName + '_input').show();
-    $(elementName).activate();
+    $('#' + elementName + '_link').hide();
+    $('#' + elementName + '_box').hide();
+    $('#' + elementName + '_input').show();
+    $('#' + elementName).focus();
     return true;
 }
 
 function swapStretchyLinkForTextInput(elementName) {
     setCurrentElement(elementName);
-    $(elementName + '_link').hide();
-    $(elementName + '_input').show();
-    $(elementName).activate();
+    $('#' + elementName + '_link').hide();
+    $('#' + elementName + '_input').show();
+    $('#' + elementName).focus();
 }
 
 function swapStretchyBoxForTextInput(elementName) {
     setCurrentElement(elementName);
-    $(elementName + '_box').hide();
-    $(elementName + '_input').show();
-    $(elementName).activate();
+    $('#' + elementName + '_box').hide();
+    $('#' + elementName + '_input').show();
+    $('#' + elementName).focus();
 }
 
 function setCurrentElement(elementName) {
@@ -269,11 +269,11 @@ function setCurrentElement(elementName) {
 }
 
 function swapTextInputForStretchyControl(elementName) {
-    var user_input = $(elementName).getValue();
+    var user_input = $('#' + elementName).val();
     var default_value;
     var original_value;
 
-    var required = $(elementName + '_input').getAttribute("required") != null;
+    var required = $('#' + elementName + '_input').attr("required") != null;
     for(i=0; i < tabbableElements.length; i ++) {
         if(tabbableElements[i].name == elementName) {
             default_value = tabbableElements[i].defaultValue;
@@ -283,61 +283,61 @@ function swapTextInputForStretchyControl(elementName) {
     }
     if (required) // required field
     {
-        $(elementName + '_input').hide();
-        $(elementName + '_box').show();
+        $('#' + elementName + '_input').hide();
+        $('#' + elementName + '_box').show();
         if (user_input.length > 0 && user_input != default_value && user_input != original_value)
         {
-            $(elementName + '_box_value').innerHTML = user_input;
-            $(elementName).value = user_input;
-            $(elementName + '_box_value').style.color = 'black';
+            $('#' + elementName + '_box_value').val(user_input);
+            $('#' + elementName).val(user_input);
+            $('#' + elementName + '_box_value').css('color', 'black');
         }
         else
         {
             if (user_input == original_value) {
-                if(original_value.blank()){
-                  $(elementName + '_box_value').innerHTML = default_value;
-                  $(elementName).value = default_value;
+                if(original_value == null || original_value == ""){
+                  $('#' + elementName + '_box_value').text(default_value);
+                  $('#' + elementName).val(default_value);
                 }
                 else {
-                  $(elementName + '_box_value').innerHTML = original_value;
-                  $(elementName).value = original_value;
+                  $('#' + elementName + '_box_value').text(original_value);
+                  $('#' + elementName).val(original_value);
                 }
-                $(elementName + '_box_value').style.color = '#888888';
+                $('#' + elementName + '_box_value').css('color', '#888888');
             }
             else {
-                $(elementName + '_box_value').innerHTML = default_value;
-                $(elementName + '_box_value').style.color = '#888888';
-                $(elementName).value = default_value;
+                $('#' + elementName + '_box_value').text(default_value);
+                $('#' + elementName + '_box_value').css('color', '#888888');
+                $('#' + elementName).val(default_value);
             }
         }
     }
     else // optional field
     {
-       $(elementName + '_input').hide();
-        $(elementName + '_link').show();
+       $('#' + elementName + '_input').hide();
+        $('#' + elementName + '_link').show();
         if (user_input.length > 0 && user_input != default_value && user_input != original_value)
         {
-            $(elementName + '_link_value').innerHTML = user_input;
-            $(elementName).value = user_input;
-            $(elementName + '_link_value').style.color = 'black';
+            $('#' + elementName + '_link_value').text(user_input);
+            $('#' + elementName).val(user_input);
+            $('#' + elementName + '_link_value').css('color', 'black');
         }
         else
         {
             if (user_input == original_value) {
                 if(original_value.blank()){
-                  $(elementName + '_link_value').innerHTML = default_value;
-                  $(elementName).value = default_value;
+                  $('#' + elementName + '_link_value').text(default_value);
+                  $('#' + elementName).val(default_value);
                 }
                 else {
-                  $(elementName + '_link_value').innerHTML = original_value;
-                  $(elementName).value = original_value;
+                  $('#' + elementName + '_link_value').text(original_value);
+                  $('#' + elementName).val(original_value);
                 }
-                $(elementName + '_link_value').style.color = '#888888';
+                $('#' + elementName + '_link_value').css('color', '#888888');
             }
             else {
-                $(elementName + '_link_value').innerHTML = default_value;
-                $(elementName + '_link_value').style.color = '#888888';
-                $(elementName).value = default_value;
+                $('#' + elementName + '_link_value').text(default_value);
+                $('#' + elementName + '_link_value').css('color', '#888888');
+                $('#' + elementName).val(default_value);
             }
         }
     }

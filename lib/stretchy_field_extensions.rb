@@ -1,9 +1,3 @@
-class String
-  def camel_case
-    self.tr('_',' ').split(' ').map {|part| part.capitalize}.join
-  end
-end
-
 module StretchyFieldExtensions
   
   def get_initial_values
@@ -17,8 +11,14 @@ module StretchyFieldExtensions
   end
 
   def is_a_required_field?(field)
-    column_validations = self.class.reflect_on_all_validations
-    column_validations.each {|v| return true if v.name.to_s == field.to_s && v.macro == :validates_presence_of }
+    column_validations = self.class.validators
+    column_validations.each  do |v|
+      if v.class.to_s.split("::").last == "PresenceValidator"
+        v.attributes.each do |a|
+          return true if a.to_s == field.to_s
+        end
+      end
+    end
     false
   end
 
@@ -37,20 +37,22 @@ module StretchyFieldExtensions
   def create_from_validations
     values = Hash.new
     columns = self.class.column_names
-    Rails.logger.info('##### creating for ' + columns.inspect)
-    #columns.delete("id")
-    columns.each {|c| values[c] = 'Optional' unless c == 'id'}
-    column_validations = self.class.reflect_on_all_validations
-    column_validations.each {|v| values[v.name.to_s] = 'Required' if v.macro == :validates_presence_of }
+    columns.each {|c| c == 'id' || is_a_required_field?(c) ? values[c] = 'Required' : values[c] = 'Optional'}
     values
   end
 
 	def eliminate_stretchy_field_defaults
     columns = self.class.column_names
     columns.each do |this_field|
-      Rails.logger.info('#### eliminating default value for ' + this_field)
 			self[this_field] = '' if self.default_values[this_field] == self[this_field]
 		end
 	end
 
 end
+
+class String
+  def camel_case
+    self.tr('_',' ').split(' ').map {|part| part.capitalize}.join
+  end
+end
+
