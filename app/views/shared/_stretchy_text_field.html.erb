@@ -13,11 +13,11 @@
     </ul>
   </div>
   
-  <div id=<%= "#{object}_#{method}_input" %> style="display:none" <%= Object.const_get(object.camel_case).new().send(:is_a_required_field?, method) ? 'required' : '' %> >
+  <div id=<%= "#{object}_#{method}_input" %> class="hidden_element" <%= Object.const_get(object.camel_case).new().send(:is_a_required_field?, method) ? 'required' : '' %> >
     <% if size != nil %>
-      <%= text_field object, method, :class => 'stretchy_input', :default_value => Object.const_get(object.camel_case).new().send(:default_value_for, method), :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')", :autocomplete => "off", :size => size %>
+      <%= text_field object, method, :class => 'stretchy_input', :required => Object.const_get(object.camel_case).new().send(:is_a_required_field?, method) ? true : false, :default_value => Object.const_get(object.camel_case).new().send(:default_value_for, method), :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')", :autocomplete => "off", :size => size %>
     <% else %>
-      <%= text_field object, method, :class => 'stretchy_input', :default_value => Object.const_get(object.camel_case).new().send(:default_value_for, method), :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')", :autocomplete => "off" %>
+      <%= text_field object, method, :class => 'stretchy_input', :required => Object.const_get(object.camel_case).new().send(:is_a_required_field?, method) ? true : false, :default_value => Object.const_get(object.camel_case).new().send(:default_value_for, method), :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')", :autocomplete => "off" %>
       <% end %>
   </div>
 

@@ -1,7 +1,7 @@
 
 <div style="clear:both;"></div>
 <div style="border-top:1px solid #ddd;">
-  <div id=<%= "contact_address_group_link" %> style=<%= @address_group_empty == true ? "display:block" : "display:none" %> >
+  <div id=<%= "contact_address_group_link" %> >
     <div class="form_text_input" style="border-top:0px;">
       <label for="Address" >Address </label>
       <div id="contact_address_link" class="stretchy_link" style="display:block" >
@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div id=<%= "contact_address_group_block" %> class="stretchy_group" style=<%= @address_group_empty == true ? "display:none" : "display:block" %> >
+  <div id=<%= "contact_address_group_block" %> class="stretchy_group" >
     <div class="form_text_input line1" style="border-top:0px;">
       <%= f.label :street %>
       <%= render :partial => 'shared/stretchy_text_field', :locals => {:object => 'contact', :method => 'street', :size => nil} %>

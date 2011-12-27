@@ -5,6 +5,11 @@
 
 $(function() {
   findTabbableElements();
+  if(elementGroups.length > 0) {
+    for(var g=0; g < elementGroups.length; g++) {
+      swapStretchyGroupForLink(elementGroups[g].name + '_start');
+    }
+  };
   document.onkeypress = advanceFocusOnTab;
 }); // end of document.ready
 
@@ -161,8 +166,8 @@ function swapStretchyLinkForGroup(elementName) {
       groupName = elementName.replace(/_start/, '');
     }
 
-    $('#' + groupName + '_link').hide();
-    $('#' + groupName + '_block').show();
+    $('#' + groupName + '_link').addClass('hidden_element');
+    $('#' + groupName + '_block').removeClass('hidden_element');
 }
 
 function swapStretchyGroupForLink(elementName) {
@@ -177,12 +182,13 @@ function swapStretchyGroupForLink(elementName) {
     var changed = checkForContent(groupName);
     if(changed)
     {
+        $('#' + groupName + '_link').addClass('hidden_element');
         return true;
     }
     else
     {
-        $('#' + groupName + '_block').hide();
-        $('#' + groupName + '_link').show();
+        $('#' + groupName + '_block').addClass('hidden_element');
+        $('#' + groupName + '_link').removeClass('hidden_element');
         return true;
     }
 }
@@ -213,8 +219,8 @@ function checkForContent(groupName) {
 
 function swapStretchyForTextInput(elementName) {
     setCurrentElement(elementName);
-    $('#' + elementName + '_stretchy').hide();
-    $('#' + elementName + '_input').show();
+    $('#' + elementName + '_stretchy').addClass('hidden_element');
+    $('#' + elementName + '_input').removeClass('hidden_element');
     $('#' + elementName).focus();
     $('#' + elementName).select();
 }
@@ -233,12 +239,12 @@ function setCurrentElement(elementName) {
         if(currentElement < elementGroups[i].firstElementIndex || currentElement > elementGroups[i].lastElementIndex) {
             var groupHasChanged = checkForContent(groupName);
             if(groupHasChanged) {
-                $('#' + groupName + '_link').hide();
-                $('#' + groupName + '_block').show();
+                $('#' + groupName + '_link').addClass('hidden_element');
+                $('#' + groupName + '_block').removeClass('hidden_element');
             }
             else {
-                $('#' + groupName + '_block').hide();
-                $('#' + groupName + '_link').show();
+                $('#' + groupName + '_block').addClass('hidden_element');
+                $('#' + groupName + '_link').removeClass('hidden_element');
             }
         }
     }
@@ -249,7 +255,7 @@ function swapTextInputForStretchyControl(elementName) {
     var default_value;
     var original_value;
 
-    var required = $('#' + elementName + '_input').attr("required") != null;
+    var required = $('#' + elementName).attr("required") != null;
     for(i=0; i < tabbableElements.length; i ++) {
         if(tabbableElements[i].name == elementName) {
             default_value = tabbableElements[i].defaultValue;
@@ -258,8 +264,8 @@ function swapTextInputForStretchyControl(elementName) {
         }
     };
 
-    $('#' + elementName + '_input').hide();
-    $('#' + elementName + '_stretchy').show();
+    $('#' + elementName + '_input').addClass('hidden_element');
+    $('#' + elementName + '_stretchy').removeClass('hidden_element');
     if (user_input.length > 0 && user_input != default_value && user_input != original_value)
     {
         $('#' + elementName + '_value').text(user_input);
