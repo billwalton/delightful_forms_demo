@@ -1,27 +1,21 @@
-var tabbableElements = [];
-var elementGroups = [];
-var currentElement = -1;
+  var tabbableElements = [];
+  var elementGroups = [];
+  var currentElement = -1;
+
 
 $(function() {
   findTabbableElements();
+  document.onkeypress = advanceFocusOnTab;
 }); // end of document.ready
 
 function populateLinkValues(element, defaultValue, originalValue) {
-  var linkID;
-  var boxID;
+  var stretchyID;
 
   if(element.className != 'stretchy_group_start' && element.className != 'stretchy_group_end'){
-    linkID = '#' + element.name + '_link_value';
-    boxID = '#' + element.name + '_box_value';
-    if($(linkID) != null && $(boxID) != null) {
-      if(originalValue == null || originalValue == "") {
-        $(linkID).text(defaultValue);
-        $(boxID).text(defaultValue);
-      }
-      else {
-        $(linkID).text(originalValue);
-        $(boxID).text(originalValue);
-      }
+    stretchyID = '#' + element.name + '_value';
+    if($(stretchyID) != null) {
+      if(originalValue == null || originalValue == "") { $(stretchyID).text(defaultValue); }
+      else { $(stretchyID).text(originalValue); }
     }
   }
 }
@@ -107,22 +101,21 @@ function advanceFocusOnTab(e) {
         {
             if(tabbableElements[nextElement].className.search(/stretchy_input/) > -1)
             {
-                setFocusOnStretchy(tabbableElements[nextElement].name);
+                swapStretchyForTextInput(tabbableElements[nextElement].name);
             }
             else
             {
                 if(tabbableElements[nextElement].className.search(/stretchy_group_start/) > -1)
-
                 {
                   if(advancingBackwards) {
                     swapStretchyGroupForLink(tabbableElements[nextElement].name);
                     nextElement -= 1;
-                    setFocusOnStretchy(tabbableElements[nextElement].name);
+                    swapStretchyForTextInput(tabbableElements[nextElement].name);
                   }
                   else {
                     swapStretchyLinkForGroup(tabbableElements[nextElement].name);
                     nextElement += 1;
-                    setFocusOnStretchy(tabbableElements[nextElement].name);
+                    swapStretchyForTextInput(tabbableElements[nextElement].name);
                   }
                 }
                 else
@@ -132,17 +125,17 @@ function advanceFocusOnTab(e) {
                       if(advancingBackwards) {
                         swapStretchyLinkForGroup(tabbableElements[nextElement].name);
                         nextElement -= 1;
-                        setFocusOnStretchy(tabbableElements[nextElement].name);
+                        swapStretchyForTextInput(tabbableElements[nextElement].name);
                       }
                       else {
                         swapStretchyGroupForLink(tabbableElements[nextElement].name);
                         nextElement += 1;
-                        setFocusOnStretchy(tabbableElements[nextElement].name);
+                        swapStretchyForTextInput(tabbableElements[nextElement].name);
                       }
                     }
                     else
                     {
-                        setFocusOnStretchy(tabbableElements[nextElement].name);
+                        swapStretchyForTextInput(tabbableElements[nextElement].name);
                     }
                 }
             }
@@ -154,16 +147,9 @@ function advanceFocusOnTab(e) {
         currentElement = nextElement;
         return false;
     }
-    else
-    {
-      if(kc == 13  && (tabbableElements[currentElement].name.search(/upc_code/) > -1)) {
-        return false;
-      }
-      else {
-        return true;
-      }
+    else {
+      return true;
     }
-    return true;
 }
 
 function swapStretchyLinkForGroup(elementName) {
@@ -215,7 +201,7 @@ function checkForContent(groupName) {
     }
 
     for(var i=group.firstElementIndex; i <= group.lastElementIndex; i++){
-        currentValue = $(tabbableElements[i].name).val();
+        currentValue = $('#' + tabbableElements[i].name).val();
         if(currentValue != tabbableElements[i].defaultValue && !(currentValue == null || currentValue == "") ) {
             groupHasContent = true;
             break;
@@ -225,26 +211,12 @@ function checkForContent(groupName) {
     return groupHasContent;
 }
 
-function setFocusOnStretchy(elementName) {
-    $('#' + elementName + '_link').hide();
-    $('#' + elementName + '_box').hide();
-    $('#' + elementName + '_input').show();
-    $('#' + elementName).focus();
-    return true;
-}
-
-function swapStretchyLinkForTextInput(elementName) {
+function swapStretchyForTextInput(elementName) {
     setCurrentElement(elementName);
-    $('#' + elementName + '_link').hide();
+    $('#' + elementName + '_stretchy').hide();
     $('#' + elementName + '_input').show();
     $('#' + elementName).focus();
-}
-
-function swapStretchyBoxForTextInput(elementName) {
-    setCurrentElement(elementName);
-    $('#' + elementName + '_box').hide();
-    $('#' + elementName + '_input').show();
-    $('#' + elementName).focus();
+    $('#' + elementName).select();
 }
 
 function setCurrentElement(elementName) {
@@ -261,12 +233,12 @@ function setCurrentElement(elementName) {
         if(currentElement < elementGroups[i].firstElementIndex || currentElement > elementGroups[i].lastElementIndex) {
             var groupHasChanged = checkForContent(groupName);
             if(groupHasChanged) {
-                $(groupName + '_link').hide();
-                $(groupName + '_block').show();
+                $('#' + groupName + '_link').hide();
+                $('#' + groupName + '_block').show();
             }
             else {
-                $(groupName + '_block').hide();
-                $(groupName + '_link').show();
+                $('#' + groupName + '_block').hide();
+                $('#' + groupName + '_link').show();
             }
         }
     }
@@ -284,65 +256,34 @@ function swapTextInputForStretchyControl(elementName) {
             original_value = tabbableElements[i].originalValue;
             break;
         }
-    }
-    if (required) // required field
+    };
+
+    $('#' + elementName + '_input').hide();
+    $('#' + elementName + '_stretchy').show();
+    if (user_input.length > 0 && user_input != default_value && user_input != original_value)
     {
-        $('#' + elementName + '_input').hide();
-        $('#' + elementName + '_box').show();
-        if (user_input.length > 0 && user_input != default_value && user_input != original_value)
-        {
-            $('#' + elementName + '_box_value').val(user_input);
-            $('#' + elementName).val(user_input);
-            $('#' + elementName + '_box_value').css('color', 'black');
-        }
-        else
-        {
-            if (user_input == original_value) {
-                if(original_value == null || original_value == ""){
-                  $('#' + elementName + '_box_value').text(default_value);
-                  $('#' + elementName).val(default_value);
-                }
-                else {
-                  $('#' + elementName + '_box_value').text(original_value);
-                  $('#' + elementName).val(original_value);
-                }
-                $('#' + elementName + '_box_value').css('color', '#888888');
+        $('#' + elementName + '_value').text(user_input);
+        $('#' + elementName).val(user_input);
+        $('#' + elementName + '_value').css('color', 'black');
+    }
+    else
+    {
+        if (user_input == original_value) {
+            if(original_value == null || original_value == ""){
+              $('#' + elementName + '_value').text(default_value);
+              $('#' + elementName).val(default_value);
             }
             else {
-                $('#' + elementName + '_box_value').text(default_value);
-                $('#' + elementName + '_box_value').css('color', '#888888');
-                $('#' + elementName).val(default_value);
+              $('#' + elementName + '_value').text(original_value);
+              $('#' + elementName).val(original_value);
             }
+            $('#' + elementName + '_value').css('color', '#888888');
+        }
+        else {
+            $('#' + elementName + '_value').text(default_value);
+            $('#' + elementName + '_value').css('color', '#888888');
+            $('#' + elementName).val(default_value);
         }
     }
-    else // optional field
-    {
-       $('#' + elementName + '_input').hide();
-        $('#' + elementName + '_link').show();
-        if (user_input.length > 0 && user_input != default_value && user_input != original_value)
-        {
-            $('#' + elementName + '_link_value').text(user_input);
-            $('#' + elementName).val(user_input);
-            $('#' + elementName + '_link_value').css('color', 'black');
-        }
-        else
-        {
-            if (user_input == original_value) {
-                if(original_value.blank()){
-                  $('#' + elementName + '_link_value').text(default_value);
-                  $('#' + elementName).val(default_value);
-                }
-                else {
-                  $('#' + elementName + '_link_value').text(original_value);
-                  $('#' + elementName).val(original_value);
-                }
-                $('#' + elementName + '_link_value').css('color', '#888888');
-            }
-            else {
-                $('#' + elementName + '_link_value').text(default_value);
-                $('#' + elementName + '_link_value').css('color', '#888888');
-                $('#' + elementName).val(default_value);
-            }
-        }
-    }
+
 }
