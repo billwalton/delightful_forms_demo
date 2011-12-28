@@ -10,17 +10,34 @@ $(function() {
       swapStretchyGroupForLink(elementGroups[g].name + '_start');
     }
   };
+  wrapStretchyInputs();
   document.onkeypress = advanceFocusOnTab;
 }); // end of document.ready
 
-function populateLinkValues(element, defaultValue, originalValue) {
+function wrapStretchyInputs() {
+  var btn = /button/
+  var grp = /group/
+  for(var e=0; e < tabbableElements.length; e++) {
+    if(!(tabbableElements[e].className.match(btn) || tabbableElements[e].className.match(grp))){
+      $('#' + tabbableElements[e].name).wrap('<div id="' + tabbableElements[e].name + '_input" ></div>');
+      $('#' + tabbableElements[e].name + '_input').wrap('<div class="stretchy_input_field"></div>');
+      var required = $('#' + tabbableElements[e].name).attr("required") != null;
+      var stretchy_div = '<div id="' + tabbableElements[e].name + '_stretchy" class=' + (required ? "stretchy_box" : "stretchy_link") + ' >';
+      stretchy_div += '<ul><li><a id="' + tabbableElements[e].name + '_value" onclick="swapStretchyForTextInput(' + '\'' + tabbableElements[e].name + '\');></a></li></ul></div>'
+      $('#' + tabbableElements[e].name + '_input').before(stretchy_div);
+      populateLinkValues(tabbableElements[e]);
+    }
+  }
+}
+
+function populateLinkValues(element) {
   var stretchyID;
 
   if(element.className != 'stretchy_group_start' && element.className != 'stretchy_group_end'){
     stretchyID = '#' + element.name + '_value';
     if($(stretchyID) != null) {
-      if(originalValue == null || originalValue == "") { $(stretchyID).text(defaultValue); }
-      else { $(stretchyID).text(originalValue); }
+      if(element.originalValue == null || element.originalValue == "") { $(stretchyID).text(element.defaultValue); }
+      else { $(stretchyID).text(element.originalValue); }
     }
   }
 }
@@ -43,7 +60,6 @@ function findTabbableElements() {
                 originalValue = allElements[e].value;
                 if(originalValue == null || originalValue == ""){allElements[e].value = defaultValue;}
                 var newElement = new domElement(allElements[e].id, allElements[e].className, defaultValue, originalValue);
-                populateLinkValues(newElement, defaultValue, originalValue);
                 tabbableElements.push(newElement);
                 if(newElement.className == 'stretchy_group_start') {
                     groupName = newElement.name.replace(/_start/,'');
@@ -166,8 +182,8 @@ function swapStretchyLinkForGroup(elementName) {
       groupName = elementName.replace(/_start/, '');
     }
 
-    $('#' + groupName + '_link').addClass('hidden_element');
-    $('#' + groupName + '_block').removeClass('hidden_element');
+    $('#' + groupName + '_link').css('display','none');
+    $('#' + groupName + '_block').css('display','block');
 }
 
 function swapStretchyGroupForLink(elementName) {
@@ -182,13 +198,13 @@ function swapStretchyGroupForLink(elementName) {
     var changed = checkForContent(groupName);
     if(changed)
     {
-        $('#' + groupName + '_link').addClass('hidden_element');
+        $('#' + groupName + '_link').css('display','none');
         return true;
     }
     else
     {
-        $('#' + groupName + '_block').addClass('hidden_element');
-        $('#' + groupName + '_link').removeClass('hidden_element');
+        $('#' + groupName + '_block').css('display','none');
+        $('#' + groupName + '_link').css('display','block');
         return true;
     }
 }
@@ -219,8 +235,8 @@ function checkForContent(groupName) {
 
 function swapStretchyForTextInput(elementName) {
     setCurrentElement(elementName);
-    $('#' + elementName + '_stretchy').addClass('hidden_element');
-    $('#' + elementName + '_input').removeClass('hidden_element');
+    $('#' + elementName + '_stretchy').css('display','none');
+    $('#' + elementName).css('display', 'block');
     $('#' + elementName).focus();
     $('#' + elementName).select();
 }
@@ -239,12 +255,12 @@ function setCurrentElement(elementName) {
         if(currentElement < elementGroups[i].firstElementIndex || currentElement > elementGroups[i].lastElementIndex) {
             var groupHasChanged = checkForContent(groupName);
             if(groupHasChanged) {
-                $('#' + groupName + '_link').addClass('hidden_element');
-                $('#' + groupName + '_block').removeClass('hidden_element');
+                $('#' + groupName + '_link').css('display','none');
+                $('#' + groupName + '_block').css('display','block');
             }
             else {
-                $('#' + groupName + '_block').addClass('hidden_element');
-                $('#' + groupName + '_link').removeClass('hidden_element');
+                $('#' + groupName + '_block').css('display','none');
+                $('#' + groupName + '_link').css('display','block');
             }
         }
     }
@@ -264,8 +280,8 @@ function swapTextInputForStretchyControl(elementName) {
         }
     };
 
-    $('#' + elementName + '_input').addClass('hidden_element');
-    $('#' + elementName + '_stretchy').removeClass('hidden_element');
+    $('#' + elementName).css('display','none');
+    $('#' + elementName + '_stretchy').css('display','block');
     if (user_input.length > 0 && user_input != default_value && user_input != original_value)
     {
         $('#' + elementName + '_value').text(user_input);

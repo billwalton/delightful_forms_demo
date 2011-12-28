@@ -4,14 +4,25 @@
 /* of the applicable End User License Agreement granted to the person who */
 /* rightfully received this copy is strictly prohibited. */
 
-/* @import url("reset.css"); */
-/* @import url("960.css");  */
+h1 {
+  font-size: 20px;
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+form {
+  margin-left: 20px;
+}
+
+.form_actions {
+  margin-left: 5px;
+}
 
 /* Forms, inputs
 ======================================================================*/
 
-input[type="text"],
-textarea{
+input[type="text"]{
     font-size:14px;
     padding:5px;
     min-width:250px;
@@ -23,8 +34,7 @@ textarea{
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus,
-textarea:focus{
+input[type="password"]:focus {
     background:#faffbd;
 }
 
@@ -35,7 +45,6 @@ label, .label{
     margin-bottom:2px;
     color:#3e3e3e;
 }
-
 
 .form_text_input{
     float: left;
@@ -73,17 +82,9 @@ label, .label{
   background-color: transparent;
 }
 
-.form_text_input .stretchy_field_message {
-    float: right;
-    width: 473px;
-    margin: 0px;
-    font-weight: bold;
+.form_text_input .stretchy_input {
+  display: none;
 }
-
-.form_text_input .help_link {
-    font-size: 80%;
-}
-
 
 /* STretchy
 ======================================================================*/
@@ -142,29 +143,6 @@ label, .label{
     min-width:68px;
     margin-top: 3px;
 }
-
-.delivery_address_list_item {
-    float: left;
-    min-height: 4.25em;
-    width: 100%;
-    border-bottom: solid thin gray;
-    color: #637362;
-    padding-left: 10px;
-}
-
-.list_item a {
-    color: #637362;
-}
-
-.list_item a:visited {
-    color: #637362;
-}
-
-.list_item a:hover {
-    background-color: #FFF;
-    color: #000;
-}
-
 
 .stretchy_box {
     background-color: #E6E7E8;
@@ -228,43 +206,4 @@ label, .label{
     text-decoration: none;
     margin-right: 15px;
     color: #888888;
-}
-
-/*.stretchy_link a:hover {
-    color: #000;
-}*/
-
-
-.list_item {
-    float: left;
-    min-height: 3em;
-    background-color: #FFF;
-    border-bottom: thin solid gray;
-    width: 100%;
-}
-
-.list_heading {
-    float: left;
-    width: 100%;
-    height: 4em;
-    margin-top: 0;
-    padding-left: 10px;
-    background-color: #B8DAAF;
-}
-
-#address_entry_form {
-    float: left;
-    margin-top: 1em;
-    margin-left: 5%;
-    width: 90%;
-}
-
-#address_entry_form .stretchy_group {
-    width: 100%;
-    border: none;
-    margin-left: 2%;
-}
-
-.hidden_element {
-    display: none;
 }
