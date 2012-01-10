@@ -7,6 +7,12 @@
   <title>Contacts: <%= controller.action_name %></title>
   <%= stylesheet_link_tag :application %>
   <%= javascript_include_tag :application %>
+  <script>
+    $(function() {
+        $(document).stretchyFields();
+    }); // end of document.ready
+  </script>
+
 </head>
 <body>
   <p style="color: green"><%= flash[:notice] %></p>

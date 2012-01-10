@@ -1,15 +1,5 @@
 module StretchyFieldExtensions
   
-  def get_initial_values
-    values = Hash.new
-    columns = self.class.column_names
-    columns.delete("id")
-    columns.each {|c|
-      values[c.to_s] = self[c].blank? ? self.default_value_for(c) : self[c]
-    }
-    values
-  end
-
   def is_a_required_field?(field)
     column_validations = self.class.validators
     column_validations.each  do |v|
@@ -31,7 +21,7 @@ module StretchyFieldExtensions
 
   def default_value_for(field)
     base_values = self.default_values
-    base_values[field]
+    base_values[field.to_s]
   end
 
   def create_from_validations
@@ -44,15 +34,8 @@ module StretchyFieldExtensions
 	def eliminate_stretchy_field_defaults
     columns = self.class.column_names
     columns.each do |this_field|
-			self[this_field] = '' if self.default_values[this_field] == self[this_field]
+			self[this_field] = '' if self.default_value_for[this_field] == self[this_field]
 		end
 	end
 
 end
-
-class String
-  def camel_case
-    self.tr('_',' ').split(' ').map {|part| part.capitalize}.join
-  end
-end
-

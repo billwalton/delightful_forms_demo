@@ -1,6 +1,6 @@
 <h1>New contact</h1>
 
-<%= form_for(@contact) do |f| %>
+<%= form_for @contact, :builder => StretchyFormBuilder do |f| %>
   <% if @contact.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@contact.errors.count, "error") %> prohibited this item from being saved:</h2>

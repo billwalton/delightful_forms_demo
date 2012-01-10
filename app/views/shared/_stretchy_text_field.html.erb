@@ -1,7 +1,0 @@
-<!-- (c) 2009-2010 Copyright William Joseph Walton, All Rights Reserved  -->
-<!-- This computer code is protected by U.S. and International copyright law. -->
-<!-- Reproduction, transmission or other use of this computer code in violation -->
-<!-- of the applicable End User License Agreement granted to the person who -->
-<!-- rightfully received this copy is strictly prohibited. -->
-
- <%= text_field object, method, :class => 'stretchy_input', :required => Object.const_get(object.camel_case).new().send(:is_a_required_field?, method) ? true : false, :default_value => Object.const_get(object.camel_case).new().send(:default_value_for, method), :onblur => "swapTextInputForStretchyControl( '#{object + '_' + method}')", :autocomplete => "off", :size => size %>

@@ -6,7 +6,7 @@ class Contact < ActiveRecord::Base
 
 	def default_values_for_stretchy_fields
     {'email' => 'add Email address',
-     'address' => 'Optional'}
+     'phone' => 'XXX-XXX-XXXX'}
 	end
 
 end
