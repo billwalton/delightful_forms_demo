@@ -7,7 +7,7 @@
     <%= f.text_field :last_name, :class => "stretchy_input" %>
   </div>
 
-  <div id="address_group" class="stretchy_group" label_value="Address" default_value="to receive junk mail">
+  <div id="address_group" class="stretchy_group" default_value="to receive junk mail">
     <div class="form_text_input">
       <%= f.label :street %>
       <%= f.text_field :street, :class => "stretchy_input" %>
@@ -27,14 +27,26 @@
       <%= f.label :zip %>
       <%= f.text_field :zip, :class => "stretchy_input" %>
     </div>
-  </div>
 
-  <div class="form_text_input">
-    <%= f.label :email %>
-    <%= f.text_field :email, :class => "stretchy_input" %>
+    <div class="form_text_input">
+      <%= f.label :directions %>
+      <%= f.text_area :directions, :class => "stretchy_input" %>
+    </div>
   </div>
+  <div id="contacts_group" class="stretchy_group" default_value="and other annoyances">
+    <div class="form_text_input">
+      <%= f.label :email %>
+      <%= f.text_field :email, :class => "stretchy_input" %>
+    </div>
 
-  <div class="form_text_input">
-    <%= f.label :phone %>
-    <%= f.text_field :phone, :class => "stretchy_input" %>
-  </div>
+    <div class="form_text_input">
+      <%= f.label :phone %>
+      <%= f.text_field :phone, :class => "stretchy_input" %>
+    </div>
+
+    <div class="form_text_input">
+      <%= f.label :cell %>
+      <%= f.text_field :cell, :class => "stretchy_input" %>
+    </div>
+
+   </div>

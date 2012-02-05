@@ -17,6 +17,7 @@ var stretchyField = {};
                         $('a.stretchy_input').on("click", function() { $(this).stretchyFields('swapLinkForInput') } );
                         $('a.stretchy_group').on("click", function() { $(this).stretchyFields('swapLinkForGroup') } );
                         $('input.stretchy_input').on("blur", function() { $(this).stretchyFields('swapInputForLink') } );
+                        $('textarea.stretchy_input').on("blur", function() { $(this).stretchyFields('swapInputForLink') } );
                         setPseudoDefaultValues( stretchyField );
                         populateLinks();
                     };
@@ -308,40 +309,62 @@ var stretchyField = {};
     };
 
     var initializeStretchyFields = function(obj) {
-        var tabbableElements = [];
-        tabbableElements.length = 0;
+      var tabbableElements = [];
+      tabbableElements.length = 0;
 
-        var thisForm = $(obj);
-        if ( thisForm != null ) {
-            var allInputElements = thisForm.find('input.stretchy_input');
-            allInputElements.each(function(index){
-        var linkStyle = ( $(this).attr("link_style") && $(this).attr("link_style") == 'stretchy_box' ) ? 'stretchy_box' : 'stretchy_link'
-                var newElement = new stretchyElement(index, $(this).attr('id'), "stretchy_input", $(this).attr("default_value") , linkStyle, $(this).val() );
-                if($(this).val() == null || $(this).val() == ""){$(this).val($(this).attr("default_value"))};
-                tabbableElements.push(newElement);
-                wrapStretchyInput(this, newElement);
-            });
-            tabbableElements = addSubmitButtonsFor( thisForm, tabbableElements );
-        };
-        return tabbableElements;
+      var thisForm = $(obj);
+      if ( thisForm != null ) {
+        var input_selector = '#' + thisForm.attr('id') + " :input";
+        var allInputElements = $(input_selector);
+        var index = 0;
+        allInputElements.each(function(){
+          if( isTabbable( $(this) ) ){
+            var linkStyle = ( $(this).attr("link_style") && $(this).attr("link_style") == 'stretchy_box' ) ? 'stretchy_box' : 'stretchy_link'
+            var newElement = new stretchyElement(index, $(this).attr('id'), "stretchy_input", $(this).attr("default_value") , linkStyle, $(this).val() );
+            if($(this).val() == null || $(this).val() == ""){$(this).val($(this).attr("default_value"))};
+            tabbableElements.push(newElement);
+            index += 1;
+            if( isWrappable( $(this) ) ){
+              wrapStretchyInput(this, newElement);
+            };
+          };
+        });
+      };
+      return tabbableElements;
     };
 
-    var addSubmitButtonsFor = function( formObject, elementsArray ){
-        var submitElements = formObject.find('input[type="submit"]');
-        submitElements.each(function() {
-            var newElement = new stretchyElement(elementsArray.length, $(this).attr('id'), "button", "", "" );
-            elementsArray.push(newElement);
-        });
-        return elementsArray;
+    var isTabbable = function(obj){
+      var nonTabbableTypes = ["hidden"];
+      var thisElementType = obj.attr("type");
+      return ( $.inArray(thisElementType, nonTabbableTypes) > -1 ? false : true );
+    };
+
+    var isWrappable = function(obj){
+      var wrappableTagTypes = ["input", "textarea"];
+      var wrappableInputTypes = ["text"];
+      var thisElementType = obj.attr("type");
+      var thisElementTagName = obj.get(0).tagName.toLowerCase();
+      var objIsWrappable = false;
+      if( ( $.inArray(thisElementTagName, wrappableTagTypes) > -1 ) ){
+        if( thisElementTagName == 'input'){
+          if( thisElementType == 'text' ){
+            objIsWrappable = true;
+          }
+        }
+        else {
+          objIsWrappable = true;
         };
+      };
+      return objIsWrappable;
+    };
 
     var wrapStretchyInput = function(obj, stretchyFieldElement) {
-        $(obj).wrap('<div id="' + obj.id + '_input" class="stretchy_input_wrapper"></div>');
-        $('#' + obj.id + '_input').wrap('<div class="stretchy_input_field"></div>');
-        var stretchy_div = '<div id="' + obj.id + '_stretchy" class=' + stretchyFieldElement.linkStyle + ' >';
-        var link_id = obj.id + '_value';
-        stretchy_div += '<ul><li><a id=' + link_id + ' class="stretchy_input" ></a></li></ul></div>'
-        $('#' + obj.id+ '_input').before(stretchy_div);
+      $(obj).wrap('<div id="' + obj.id + '_input" class="stretchy_input_wrapper"></div>');
+      $('#' + obj.id + '_input').wrap('<div class="stretchy_input_field"></div>');
+      var stretchy_div = '<div id="' + obj.id + '_stretchy" class=' + stretchyFieldElement.linkStyle + ' >';
+      var link_id = obj.id + '_value';
+      stretchy_div += '<ul><li><a id=' + link_id + ' class="stretchy_input" ></a></li></ul></div>'
+      $('#' + obj.id+ '_input').before(stretchy_div);
     };
 
     var populateLinks = function( ) {
@@ -377,11 +400,11 @@ var stretchyField = {};
 
         var allGroups = $(obj).find('div.stretchy_group');
         allGroups.each(function(index){
-            var firstElement = $(this).find('input.stretchy_input').first();
-            var lastElement = $(this).find('input.stretchy_input').last();
+            var firstElement = $(this).find(':input').first();
+            var lastElement = $(this).find(':input').last();
             var firstElementIndex = findIndexOf(firstElement);
             var lastElementIndex = findIndexOf(lastElement);
-            var newGroup = new stretchyGroup($( this).attr('id'), firstElementIndex, lastElementIndex, $(this).attr('label_value'), $(this).attr('default_value') );
+            var newGroup = new stretchyGroup($(this).attr('id'), firstElementIndex, lastElementIndex, $(this).attr('label_value'), $(this).attr('default_value') );
             groupElements.push(newGroup);
             wrapStretchyGroup(this);
         });
